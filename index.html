@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>OTP Verification Page</title>
+    <link rel="stylesheet" href="verify.css">
+
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h3>OTP VERIFICATION</h3>
+        <div class="inp">
+            <input type="text" maxlength="1" class="otp-input">
+            <input type="text" maxlength="1" class="otp-input">
+            <input type="text" maxlength="1" class="otp-input">
+            <input type="text" maxlength="1" class="otp-input">
+        </div>
+        <p>Don't get the code?<a href="" style="color: white; text-decoration: none;"> Resend</a></p>
+        <button class="btn-col" id="verify-btn"><b>Verify</b></button>
+        <p id="message" class="mt-2" style="color: white; font-weight: 700;"></p>
+    </div>
+
+    <div class="container mt-5">
+        <div class=" my-3">
+            <div class="text-center">
+                <h5>Mobile OTP Message</h5>
+                <p id="mobileOtp">Your OTP will appear here</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateOTP() {
+            // Generates a random 4-digit OTP
+            const otp = Math.floor(1000 + Math.random() * 9000);
+            return otp;
+        }
+        const validOtp = generateOTP();
+        console.log("Generated OTP:", validOtp);
+
+        document.getElementById('mobileOtp').textContent = validOtp;
+        let inputs = document.querySelectorAll('.otp-input');
+
+        inputs.forEach((element, index) => {
+            element.addEventListener('keyup', () => {
+                if (element.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+        });
+
+        document.getElementById('verify-btn').addEventListener('click', () => {
+            const otp = Array.from(inputs).map(input => input.value).join('');
+            const messageElement = document.getElementById('message');
+
+            if (otp.length === inputs.length) {
+                if (otp === validOtp.toString()) {
+                    messageElement.textContent = "OTP is valid!";
+                    messageElement.style.color = "green";
+                } else {
+                    messageElement.textContent = "Invalid OTP. Please try again.";
+                    messageElement.style.color = "red";
+                }
+            } else {
+                messageElement.textContent = "Please enter the complete OTP.";
+                messageElement.style.color = "red";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
